@@ -15,7 +15,7 @@ SelectionGUI::SelectionGUI() {
 SelectionGUI::~SelectionGUI() {}
 
 //grabs a plugin from the entries that are registered
-void SelectionGUI::init(RenderWindow& window) {
+void SelectionGUI::init(Window& window) {
 	this->plugin = Shakkar::Plugins::getEntries().at(0);
 	plugin->Init(window);
 }
@@ -33,7 +33,7 @@ GUI_payload SelectionGUI::update(const Shakkar::inputs& input) {
 	return { nullptr, true };
 }
 
-void SelectionGUI::render(RenderWindow& window) {
+void SelectionGUI::render(Window& window) {
 	plugin->render(window);
 
 }

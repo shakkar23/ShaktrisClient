@@ -9,8 +9,8 @@ public:
     ~demo() {}
 
     void gameLogic(const Shakkar::inputs& input) override;
-    void render(RenderWindow& window) override;
-    void Init(RenderWindow& window) override;
+    void render(Window& window) override;
+    void Init(Window& window) override;
     void updateSettings(uint32_t das, uint32_t arr) override;
 
 private:

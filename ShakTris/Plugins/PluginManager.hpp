@@ -28,7 +28,7 @@ public:
     Plugin() = default;
     ~Plugin();
 
-    void initializePlugin(RenderWindow& window) const;
+    void initializePlugin(Window& window) const;
     std::string getPluginName() const;
     std::string getPluginAuthor() const;
     std::string getPluginDescription() const;
@@ -64,7 +64,7 @@ public:
     PluginManager() = delete;
 
     static bool load(std::string_view pluginFolder);
-    static bool loadPlugins(RenderWindow& window);
+    static bool loadPlugins(Window& window);
     static void unload();
     static void reload();
 

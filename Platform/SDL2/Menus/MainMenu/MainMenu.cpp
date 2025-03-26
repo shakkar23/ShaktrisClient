@@ -2,10 +2,6 @@
 
 mainMenuGUI::mainMenuGUI()
 {
-	//change this
-	background.destRect.w = DEFAULT_SCREEN_WIDTH;
-	background.destRect.h = DEFAULT_SCREEN_HEIGHT;
-	//background.textureRegion;
 
 	playButton.destRect.w = 177;
 	playButton.destRect.h = 61;
@@ -24,15 +20,17 @@ mainMenuGUI::mainMenuGUI()
 	texs = { &playButton, &settingsButton, &exitButton };
 }
 
-void mainMenuGUI::init(RenderWindow& window) {
+void mainMenuGUI::init(Window& window) {
 	background.load(window, "Asset/Sprites/MainMenu/background.png");
 	settingsButton.load(window, "Asset/Sprites/MainMenu/settingsText.png");
 	playButton.load(window, "Asset/Sprites/MainMenu/playText.png");
 	exitButton.load(window, "Asset/Sprites/MainMenu/exitText.png");
 
+	auto[w,h] = window.get_window_size();
+
 	//change this
-	background.destRect.w = DEFAULT_SCREEN_WIDTH;
-	background.destRect.h = DEFAULT_SCREEN_HEIGHT;
+	background.destRect.w = w;
+	background.destRect.h = h;
 	//background.textureRegion;
 
 	playButton.destRect.w = 177;
@@ -92,42 +90,45 @@ GUI_payload mainMenuGUI::update(const Shakkar::inputs& input) {
 	return { nullptr, true };
 }
 
-void mainMenuGUI::render(RenderWindow& window) {
+void mainMenuGUI::render(Window& window) {
 
-	Uint8 r = 0, g = 0, b = 255;
-	Uint8 rDud = 255, gDud = 255, bDud = 255;
+	Uint8 highlighted_red = 255, highlighted_green = 255, highlighted_blue = 0;
+	Uint8 default_red = 255, default_green = 255, default_blue = 255;
 	switch ((GameState)highlighted)
 	{
 	case mainMenuGUI::Play:
 		this->texs[Play]->setSurfaceColorMod(window,
-			r, g, b);
+			highlighted_red, highlighted_green, highlighted_blue);
 		this->texs[Settings]->setSurfaceColorMod(window,
-			rDud, gDud, bDud);
+			default_red, default_green, default_blue);
 		this->texs[Exit]->setSurfaceColorMod(window,
-			rDud, gDud, bDud);
+			default_red, default_green, default_blue);
 
 		break;
 	case mainMenuGUI::Settings:
 		this->texs[Play]->setSurfaceColorMod(window,
-			rDud, gDud, bDud);
+			default_red, default_green, default_blue);
 		this->texs[Settings]->setSurfaceColorMod(window,
-			r, g, b);
+			highlighted_red, highlighted_green, highlighted_blue);
 		this->texs[Exit]->setSurfaceColorMod(window,
-			rDud, gDud, bDud);
+			default_red, default_green, default_blue);
 		break;
 	case mainMenuGUI::Exit:
 
 		this->texs[Play]->setSurfaceColorMod(window,
-			rDud, gDud, bDud);
+			default_red, default_green, default_blue);
 		this->texs[Settings]->setSurfaceColorMod(window,
-			rDud, gDud, bDud);
+			default_red, default_green, default_blue);
 		this->texs[Exit]->setSurfaceColorMod(window,
-			r, g, b);
+			highlighted_red, highlighted_green, highlighted_blue);
 		break;
 	default:
 		break;
 	}
+
 	window.clear();
+	auto [win_w, win_h] = window.get_window_size();
+	background.destRect = window.calculate_outer_rect({ 0,0,win_w, win_h }, (float)background.destRect.w / background.destRect.h);
 	background.render(window);
 	for (auto* e : texs)
 		e->render(window);

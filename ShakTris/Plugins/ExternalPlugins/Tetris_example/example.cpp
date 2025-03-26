@@ -11,11 +11,10 @@ demo::demo() : Shakkar::Tetris() {
 }
 
 void demo::updateSettings(uint32_t das, uint32_t arr) {
-    game.dasSetting = das;
-    game.arrSetting = arr;
+    game.updateSettings(das, arr);
 }
 //override
-void demo::Init(RenderWindow& window) {
+void demo::Init(Window& window) {
     game.Init(window);
 
     //handling the fact that this is also simultaneously the ReInit() function, TODO: change later for it to be a stand alone function
@@ -38,7 +37,7 @@ void demo::gameLogic(const Shakkar::inputs& input) {
 }
 
 //override
-void demo::render(RenderWindow& window)  {
+void demo::render(Window& window)  {
     
     game.render(window);
 }
@@ -47,5 +46,5 @@ void demo::render(RenderWindow& window)  {
 ////         name of plugin     author           description?
 PLUGIN_SETUP("Tetris_exmaple",  "Shakkar23",     "example plugin lets GOOOO") {
     Shakkar::Plugins::addorig<demo>();
-    Shakkar::Plugins::getEntries().back()->Init((*(RenderWindow*)window));
+    Shakkar::Plugins::getEntries().back()->Init((*(Window*)window));
 }

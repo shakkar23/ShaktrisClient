@@ -4,7 +4,6 @@ set(PLUGIN_SOURCES
 	"${CMAKE_CURRENT_LIST_DIR}/example.cpp"
 	"${CMAKE_CURRENT_LIST_DIR}/ppt.cpp"
 	"${SRC}/ShakTris/Input/Input.cpp"
-	"${SRC}/Platform/SDL2/RenderWindow.cpp"
 	"${SRC}/Platform/SDL2/TextureManager.cpp"
 )
 set(PLUGIN_INCLUDE_DIRS

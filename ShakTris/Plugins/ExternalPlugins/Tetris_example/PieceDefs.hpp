@@ -14,6 +14,7 @@ enum ColorType : uint_fast8_t {
     //special types
     empty,
     line_clear,
+    garbage,
     number_of_ColorTypes
 }; 
 

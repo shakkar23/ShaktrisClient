@@ -2,7 +2,6 @@
 set(PLATFORM_SOURCES
 	${GAME_SOURCES}
 	"${SRC}/Platform/SDL2/Engine.cpp"
-	"${SRC}/Platform/SDL2/RenderWindow.cpp"
 	"${SRC}/Platform/SDL2/TextureManager.cpp"
 	"${SRC}/Platform/SDL2/Menus/Menus.cpp"
 	"${SRC}/Platform/SDL2/Menus/MainMenu/MainMenu.cpp"
@@ -14,7 +13,6 @@ set(PLATFORM_SOURCES
 
 set(PLATFORM_HEADERS 
 	"${SRC}/Platform/SDL2/headers/Engine.hpp"
-	"${SRC}/Platform/SDL2/headers/RenderWindow.hpp"
 	"${SRC}/Platform/SDL2/headers/TextureManager.hpp"
 	"${SRC}/Platform/SDL2/Menus/Menus.hpp"
 	"${SRC}/Platform/SDL2/Menus/MainMenu/MainMenu.hpp"
@@ -27,7 +25,6 @@ set(PLATFORM_HEADERS
 
 set(REGISTRY_HEADERS 
 	"${SRC}/Platform/SDL2/headers/Game.hpp"
-	"${SRC}/Platform/SDL2/headers/RenderWindow.hpp"
 	"${SRC}/Platform/SDL2/Audio/Audio.hpp"
 	"${SRC}/ShakTris/Plugins/PluginHeaders/PluginRegistry.hpp"
 	"${SRC}/ShakTris/Plugins/PluginManager.hpp"

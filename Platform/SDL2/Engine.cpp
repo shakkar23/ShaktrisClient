@@ -1,7 +1,7 @@
 ﻿#include "Engine.hpp"
 
 #include <iostream>
-#include <vector>
+#include <utility>
 
 
 class SDL_init {
@@ -44,10 +44,20 @@ public:
 
 void ProcessInputs(SDL_Event& event, bool& shouldDisplay, bool& windowSizedChanged, Shakkar::inputs& input, bool& gameRunning);
 
+// c callable function to render while the window is being resized
+static int render_game(void* userData, SDL_Event* event) {
+	auto[game_manager, window] = *(std::pair<gameManager&, Window&>*)userData;
+
+	if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_EXPOSED) {
+		game_manager.render(window);
+	}
+	return 0;
+}
+
 int main(int argc, char* args[]) {
 	SDL_init sdl;
 
-	RenderWindow window("Shaktris", 960, 960);
+	Window window("Shaktris", 960, 960);
 
 	gameManager game_manager(window);
 
@@ -63,6 +73,10 @@ int main(int argc, char* args[]) {
 	double alpha = 0.0;
 	Uint64 last_time = SDL_GetPerformanceCounter();
 	Uint64 ticks = 0;
+
+	// allow rendering while screen is being resized
+	const std::pair<gameManager&, Window&> userData = { game_manager, window };
+	SDL_AddEventWatch(render_game, (void*) &userData);
 
 	while (gameRunning) {
 		
@@ -85,11 +99,9 @@ int main(int argc, char* args[]) {
 
 				alpha -= 1.0;
 			}
+
 			if (gameRunning) {
 				game_manager.render(window);
-			}
-			else {
-				gameRunning = false;
 			}
 		}
 	}

@@ -18,9 +18,9 @@ public:
 	~PlayMenuGUI();
 	TTF_Font* font{};
 	Shakkar::Tetris* plugin;
-	void init(RenderWindow& window) override;
+	void init(Window& window) override;
 	GUI_payload update(const Shakkar::inputs& input) override;
-	void render(RenderWindow& window) override;
+	void render(Window& window) override;
 	Sprite backGround;
 	int selectedGame = 0;
 

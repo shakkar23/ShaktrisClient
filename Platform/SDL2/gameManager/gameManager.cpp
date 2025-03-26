@@ -1,6 +1,6 @@
 #include "gameManager.hpp"
 
-gameManager::gameManager(RenderWindow& window) {
+gameManager::gameManager(Window& window) {
     PluginManager::loadPlugins(window);
     subGUIs.push_back(new mainMenuGUI());
 }
@@ -36,7 +36,7 @@ bool gameManager::update(const Shakkar::inputs& input) {
 	}
     return true;
 }
-void gameManager::render(RenderWindow &window) {
+void gameManager::render(Window &window) {
     if (!subGUIs.back()->isInitialized) {
         subGUIs.back()->init(window);
     }

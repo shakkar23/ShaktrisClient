@@ -11,7 +11,4 @@
 #include "TextureManager.hpp"
 #include "RenderWindow.hpp"
 
-constexpr auto DEFAULT_SCREEN_WIDTH = 1920;
-constexpr auto DEFAULT_SCREEN_HEIGHT = 1080;
-
 constexpr auto UPDATES_A_SECOND = 100;

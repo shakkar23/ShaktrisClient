@@ -17,10 +17,10 @@ namespace Shakkar {
             explicit Tetris(){}
             virtual void gameLogic(const Shakkar::inputs& input) = 0;
             virtual void updateSettings(uint32_t das, uint32_t arr) = 0;
-            virtual void render(RenderWindow& window) = 0;
+            virtual void render(Window& window) = 0;
             //this needs to reload the game when called after the first time called
             // TODO: change later for reloading to be a stand alone function
-            virtual void Init(RenderWindow& window) = 0;
+            virtual void Init(Window& window) = 0;
             bool isPlaying = false;
         private:
         //the Play menu that will look at the names and display them so they need to have access to these names0

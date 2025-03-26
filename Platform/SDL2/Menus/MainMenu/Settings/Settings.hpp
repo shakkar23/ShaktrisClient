@@ -21,9 +21,9 @@ public:
 	SurfaceTexture settingsButton;
 	SurfaceTexture exitButton;
 
-	void init(RenderWindow& window) override;
+	void init(Window& window) override;
 	GUI_payload update(const Shakkar::inputs& input) override;
-	void render(RenderWindow& window) override;
+	void render(Window& window) override;
 	
 private:
 	std::vector<SurfaceTexture*>texs;

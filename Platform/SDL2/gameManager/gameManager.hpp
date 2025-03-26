@@ -10,9 +10,9 @@ class gameManager
 {
 public:
 	bool update(const Shakkar::inputs& input);
-	void render(RenderWindow &window);
+	void render(Window &window);
 
-	gameManager(RenderWindow& window);
+	gameManager(Window& window);
 	~gameManager();
 private:
 	enum class GameState : uint_fast8_t

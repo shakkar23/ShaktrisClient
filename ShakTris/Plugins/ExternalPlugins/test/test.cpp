@@ -14,11 +14,11 @@ demo::demo() : Shakkar::Tetris() {
 void demo::updateSettings(uint32_t das, uint32_t arr) {
 }
 //override
-void demo::Init(RenderWindow& window) {
+void demo::Init(Window& window) {
 
     //handling the fact that this is also simultaneously the ReInit() function, TODO: change later for it to be a stand alone function
     isPlaying = true;
-    window.getWindowSize(windowWidth, windowHeight);
+    std::tie(windowWidth, windowHeight) = window.get_window_size();
 }
 
 //override
@@ -29,19 +29,19 @@ void demo::gameLogic(const Shakkar::inputs& input) {
 }
 
 //override
-void demo::render(RenderWindow& window) {
+void demo::render(Window& window) {
 
-    window.getWindowSize(windowWidth, windowHeight);
+    std::tie(windowWidth, windowHeight) = window.get_window_size();
     window.clear();
 
     Uint8 r, g, b, a;
-    window.getDrawColor(r, g, b, a);
+    window.get_draw_color(r, g, b, a);
     
-    window.setDrawColor(255, 0, 0, 255);
+    window.set_draw_color(255, 0, 0, 255);
     
-    window.drawRect({ mouseX, mouseY, 20, 20});
+    window.draw_rect_outline({ mouseX, mouseY, 20, 20});
     
-    window.setDrawColor(r,g,b,a);
+    window.set_draw_color(r,g,b,a);
 }
 
 

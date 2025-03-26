@@ -1,7 +1,7 @@
 #include "Settings.hpp"
 
 
-void settingsMenuGUI::init(RenderWindow& window) {
+void settingsMenuGUI::init(Window& window) {
 	if (!isInitialized) {
 		background.load(window, "Asset/Sprites/invertedshak.png");
 		settingsButton.load(window, "Asset/Sprites/MainMenu/settingsText.png");
@@ -9,7 +9,8 @@ void settingsMenuGUI::init(RenderWindow& window) {
 		exitButton.load(window, "Asset/Sprites/MainMenu/exitText.png");
 
 		//change this
-		background.destRect = { 0, 0, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT };
+		auto[w, h] = window.get_window_size();
+		background.destRect = { 0, 0, w, h};
 		//background.textureRegion;
 
 		playButton.destRect = { 0,0,177,61 };
@@ -62,7 +63,7 @@ GUI_payload settingsMenuGUI::update(const Shakkar::inputs& input) {
 	return { nullptr, true };
 }
 
-void settingsMenuGUI::render(RenderWindow& window) {
+void settingsMenuGUI::render(Window& window) {
 	Uint8 r = 0, g = 0, b = 255;
 	Uint8 rDud = 255, gDud = 255, bDud = 255;
 	switch ((GameState)highlighted)

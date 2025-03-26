@@ -37,10 +37,10 @@ PlayMenuGUI::~PlayMenuGUI() {
 
 
 //grabs a plugin from the entries that are registered
-void PlayMenuGUI::init(RenderWindow& window) {
-
+void PlayMenuGUI::init(Window& window) {
+	auto [w, h] = window.get_window_size();
 	this->backGround.load(window, "Asset/Sprites/PlayMenu/black169.png");
-	backGround.destRect = { 0,0,DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT };
+	backGround.destRect = { 0,0,w, h };
 
 	pluginReInit = false;
 	isInitialized = true;
@@ -85,7 +85,7 @@ GUI_payload PlayMenuGUI::update(const Shakkar::inputs& input) {
 	return { nullptr, true };
 }
 
-void PlayMenuGUI::render(RenderWindow& window) {
+void PlayMenuGUI::render(Window& window) {
 	[[unlikely]] if (pluginReInit) {
 		plugin->Init(window);
 		pluginReInit = false;
@@ -109,7 +109,7 @@ void PlayMenuGUI::render(RenderWindow& window) {
 			// get the name for the game
 			if(i == selectedGame) { color.r = 0xff; color.g = 0; color.b = 0; } else { color.r = 0xff; color.g = 0xff; color.b = 0xff; };
 			SDL_Surface* TextSurface = TTF_RenderText_Solid(font, games[i]->m_unlocalizedTetrisName.c_str(), color);
-			SDL_Texture* text = window.CreateTextureFromSurface(TextSurface);
+			SDL_Texture* text = window.create_texture_from_surface(TextSurface);
 
 			//set the position of the game to be below the last game, and a bit to the right of the left side of the screen
 			textPos.y += textPos.h + 10;
@@ -120,7 +120,7 @@ void PlayMenuGUI::render(RenderWindow& window) {
 			
 
 			// render and clean up
-			window.renderCopy(text, NULL, &textPos);
+			window.render_copy(text, NULL, &textPos);
 			SDL_FreeSurface(TextSurface);
 			SDL_DestroyTexture(text);
 		}

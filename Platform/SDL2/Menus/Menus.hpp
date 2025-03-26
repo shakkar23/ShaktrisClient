@@ -16,9 +16,9 @@ typedef std::pair<GUI*, bool> GUI_payload;
 class GUI
 {
 public:
-	virtual void init(RenderWindow& window) = 0; // will be called to initialize the class, please set isInitialized as true when this is called
+	virtual void init(Window& window) = 0; // will be called to initialize the class, please set isInitialized as true when this is called
 	virtual GUI_payload update(const Shakkar::inputs &input) = 0; // use the menu variables as the controls
-	virtual void render(RenderWindow& window) = 0;
+	virtual void render(Window& window) = 0;
 	virtual ~GUI() = default;
 	bool isInitialized = false;
 private:
