@@ -15,10 +15,6 @@
 #include <vector>
 
 
-constexpr int half(int i) {
-    return i / 2;
-}
-
 const PieceType getRandPiece() {
     return static_cast<PieceType>(pptRand());
 };
@@ -41,13 +37,11 @@ public:
         this->spin = spin;
 
         //populate local piece definition
-        for (size_t i = 0; i < MINOSINAPIECE; i++)
-        {
+        for (size_t i = 0; i < MINOSINAPIECE; i++) {
             piecedef[i] = PieceDefintions[PieceTypeToColorType(kind)][i];
         }
         //match up the spin direction of the local piece definition with what is given by the params
-        switch (spin)
-        {
+        switch (spin) {
         case North:
             break;
         case East:
@@ -69,19 +63,15 @@ public:
 
     // rotates the piece 90 degrees counter clock wise
     // Thanks MinusKelvin for the idea of using coordinates and not a definition
-    void rotateCW()
-    {
-        for (auto& coords : piecedef)
-        {
+    void rotateCW() {
+        for (auto& coords : piecedef) {
             std::swap(coords.y, coords.x);
             coords.y = -coords.y;
         }
     }
 
-    void rotateCCW()
-    {
-        for (auto& coords : piecedef)
-        {
+    void rotateCCW() {
+        for (auto& coords : piecedef) {
             std::swap(coords.y, coords.x);
             coords.x = -coords.x;
         }
@@ -111,27 +101,22 @@ public:
     }
     void makeBoardGarbage() {
         for (auto& lines : board)
-            for (auto& mino : lines)
-            {
+            for (auto& mino : lines) {
                 if (mino != ColorType::empty)
                     mino = ColorType::line_clear;
             }
     }
     void clear() {
-        for (auto& width : board)
-        {
-            for (auto& cell : width)
-            {
+        for (auto& width : board) {
+            for (auto& cell : width) {
                 cell = empty;
             }
         }
     }
     int clearLines() {
         int linesCleared{};
-        for (size_t h = 0; h < LOGICALBOARDHEIGHT; h++)
-        {
-            for (size_t w = 0; w < BOARDWIDTH; w++)
-            {
+        for (size_t h = 0; h < LOGICALBOARDHEIGHT; h++) {
+            for (size_t w = 0; w < BOARDWIDTH; w++) {
 
                 if (board.at(w).at(h) == empty)
                     break;
@@ -149,23 +134,18 @@ public:
         if (whichLine >= LOGICALBOARDHEIGHT)
             whichLine = LOGICALBOARDHEIGHT - 1;
         // clear the line in question
-        for (size_t i = 0; i < BOARDWIDTH; i++)
-        {
+        for (size_t i = 0; i < BOARDWIDTH; i++) {
             board.at(i).at(whichLine) = empty;
         }
 
         //pull down the rest of the lines above the cleared line down
-        for (size_t w = 0; w < BOARDWIDTH; w++)
-        {
-            for (size_t h = whichLine; h < LOGICALBOARDHEIGHT; h++)
-            {
-                if (h == (LOGICALBOARDHEIGHT - 1))
-                {
+        for (size_t w = 0; w < BOARDWIDTH; w++) {
+            for (size_t h = whichLine; h < LOGICALBOARDHEIGHT; h++) {
+                if (h == (LOGICALBOARDHEIGHT - 1)) {
 
                     board.at(w).at(h) = empty;
                     break;
-                }
-                else {
+                } else {
                     board.at(w).at(h) = board.at(w).at((h + 1));
                 }
             }
@@ -188,8 +168,7 @@ public:
     void setPiece(const Piece& piece) {
         //Shakkar::playAudio("Asset/Sounds/Sound.wav", (128 / 5));
 
-        for (auto& coord : piece.piecedef)
-        {
+        for (auto& coord : piece.piecedef) {
             if ((((0 <= (coord.y + piece.y)) && ((coord.y + piece.y) < LOGICALBOARDHEIGHT))) && (((0 <= (coord.x + piece.x)) && ((coord.x + piece.x) < BOARDWIDTH)))) //if inbounds of board
             {
                 board.at(coord.x + piece.x).at((coord.y + piece.y)) = PieceTypeToColorType(piece.kind);
@@ -198,8 +177,7 @@ public:
     }
     bool isCollide(const Piece& piece) {
 
-        for (auto& coord : piece.piecedef)
-        {
+        for (auto& coord : piece.piecedef) {
 
             if ((((0 <= (coord.y + piece.y)) && ((coord.y + piece.y) < LOGICALBOARDHEIGHT))) && (((0 <= (coord.x + piece.x)) && ((coord.x + piece.x) < BOARDWIDTH)))) //if inbounds of board
             {
@@ -222,8 +200,7 @@ public:
     }
 
     constexpr const char colorTypeToString(const ColorType color) {
-        switch (color)
-        {
+        switch (color) {
         case S:
             return'S';
             break;
@@ -261,8 +238,7 @@ constexpr uint_fast8_t pieceSpawnDelayMAX = 0;
 constexpr uint_fast16_t lockDelayMAX = (UPDATES_A_SECOND);
 constexpr auto perfectClearDamage = 10;
 constexpr auto backToBackBonus = 2;
-class Game
-{
+class Game {
 public:
 
     Game();
@@ -281,24 +257,31 @@ public:
 
         for (size_t i = 0; i < 7; i++)
             queue.emplace_back(Piece(getRandPiece()));
-		
-        this->ghostPieces.load(window,"Asset/Sprites/exampleAssets/ghostPieces.png", 16, 16);
-        this->pieces     .load(window,"Asset/Sprites/exampleAssets/TetrisPieces.png",16,16);
-        this->matrix     .load(window,"Asset/Sprites/Tetris_images/Matrix.png"); // original size is 224 by 299
-		// surface matrix should start on 50,34, and end at 169,273 relative to the matrix.png
-        // 16 for the size of the minos
-		// 10x20 for the size of the board
-		this->surface_matrix = SurfaceTexture(window, 16*10, 16*20);
 
-        this->background .load(window, "Asset/Sprites/exampleAssets/TetrisBackground.png"); //1080p background
-        this->background.destRect = {0,0,1920,1080};
-        
+        this->ghostPieces.load(window, "Asset/Sprites/exampleAssets/ghostPieces.png", 16, 16);
+        this->pieces.load(window, "Asset/Sprites/exampleAssets/TetrisPieces.png", 16, 16);
+        this->matrix.load(window, "Asset/Sprites/Tetris_images/Matrix.png"); // original size is 224 by 299
+        // surface matrix should start on 50,34, and end at 169,273 relative to the matrix.png
+        // 16 for the size of the minos
+        // 10x20 for the size of the board
+        this->surface_matrix = SurfaceTexture(window, 16 * 10, 16 * 20);
+        //SDL_SetSurfaceBlendMode(surface_matrix.surface, SDL_BLENDMODE_NONE);
+
+        for (auto& surface : this->surface_queue) {
+            surface = SurfaceTexture(window, 16 * 5, 16 * 5);
+        }
+
+        this->surface_hold = SurfaceTexture(window, 16 * 5, 16 * 5);
+
+        this->background.load(window, "Asset/Sprites/exampleAssets/TetrisBackground.png"); //1080p background
+        this->background.destRect = { 0,0,1920,1080 };
+
         if (!font)
             this->font = TTF_OpenFont("Asset/Sprites/exampleAssets/font.ttf", 36);
         //this->matrixBackground.Init("Asset/Sprites/exampleAssets/matrixBackground", window); //need this later
 
 
-		
+
         timeWhenInit = SDL_GetPerformanceCounter();
         piecesPlaced = 0;
         softdropCountdown = softdropCountdownMAX;
@@ -335,10 +318,10 @@ public:
         board.clear();
     }
 
-	void updateSettings(uint32_t das, uint32_t arr) {
-		dasSetting = das;
-		arrSetting = arr;
-	}
+    void updateSettings(uint32_t das, uint32_t arr) {
+        dasSetting = das;
+        arrSetting = arr;
+    }
 
 private:
     void tryMovePiece(MoveDirection direction, bool JustPressed) {
@@ -353,34 +336,27 @@ private:
             dasIterator = 0;
             arrIterator = 0;
             currentPiece.setX(currentPiece.x + offset);
-            if (board.isCollide(currentPiece))
-            {
+            if (board.isCollide(currentPiece)) {
                 currentPiece.setX(currentPiece.x - offset); // failed, go back
                 return;
-            }
-            else
+            } else
                 return;
 
         }
 
         if (dasIterator >= dasSetting) {
             // success! now try to das
-            if (arrIterator >= arrSetting)
-            {
-                for (; arrIterator >= arrSetting; arrIterator -= arrSetting)
-                {
+            if (arrIterator >= arrSetting) {
+                for (; arrIterator >= arrSetting; arrIterator -= arrSetting) {
                     currentPiece.setX(currentPiece.x + offset);
-                    if (board.isCollide(currentPiece))
-                    {
+                    if (board.isCollide(currentPiece)) {
                         currentPiece.setX(currentPiece.x - offset); // failed, go back
                         return;
                     }
                 }
-            }
-            else
+            } else
                 arrIterator += (1000 / UPDATES_A_SECOND);
-        }
-        else
+        } else
             dasIterator += (1000 / UPDATES_A_SECOND);
 
         return;
@@ -388,8 +364,7 @@ private:
 
     bool tryRotate(Piece& piece, TurnDirection direction) {
         auto incrRotClockWise = [&](RotationDirection& spin) {
-            switch (spin)
-            {
+            switch (spin) {
             case North:
                 spin = East;
                 break;
@@ -405,7 +380,7 @@ private:
             default:
                 break;
             }
-        };
+            };
         auto TspinDetection = [](Piece& piece, Board& board, bool& Tspinned) {
             auto isEmpty = [](int x, int y, Board& board) {
                 if ((((0 <= y) && (y < LOGICALBOARDHEIGHT))) && (((0 <= x) && (x < BOARDWIDTH)))) //if inbounds of board
@@ -427,7 +402,7 @@ private:
                     return true;
                 }
                 return false;
-            };
+                };
             if (piece.kind == PieceType::T) {
                 bool topright(isEmpty(piece.x + 1, piece.y + 1, board));
                 bool topleft(isEmpty(piece.x - 1, piece.y + 1, board));
@@ -439,20 +414,15 @@ private:
                 else
                     Tspinned = false;
             }
-        };
+            };
         // temporary x and y to know their initial location
         const int_fast8_t x = piece.x;
         const int_fast8_t y = piece.y;
-        if (direction == Right)
-        {
+        if (direction == Right) {
             piece.rotateCW();
-        }
-        else if (direction == Left)
-        {
+        } else if (direction == Left) {
             piece.rotateCCW();
-        }
-        else if (direction == oneEighty)
-        {
+        } else if (direction == oneEighty) {
             piece.rotateCCW();
             piece.rotateCCW();
         }
@@ -463,8 +433,7 @@ private:
             RotationDirection nextDir = piece.spin;
             if (direction == Right)
                 incrRotClockWise(nextDir);
-            else if (direction == Left)
-            {
+            else if (direction == Left) {
                 incrRotClockWise(nextDir); incrRotClockWise(nextDir); incrRotClockWise(nextDir);
             }
 
@@ -473,9 +442,7 @@ private:
             if (piece.kind == PieceType::I) {
                 offsetData = &IPieceOffsetData[piece.spin];
                 nextOffset = &IPieceOffsetData[nextDir];
-            }
-            else if (piece.kind == PieceType::O)
-            {
+            } else if (piece.kind == PieceType::O) {
                 offsetData = &OPieceOffsetData[piece.spin];
                 nextOffset = &OPieceOffsetData[nextDir];
             }
@@ -492,16 +459,13 @@ private:
                 }
             }
             piece.setX(x); piece.setY(y);
-        }
-        else
-        {
+        } else {
             RotationDirection nextDir = piece.spin;
             incrRotClockWise(nextDir); incrRotClockWise(nextDir);
 
             auto* kickdata = &wallkick180data[piece.spin];
             bool isI = false;
-            if (piece.kind == PieceType::I)
-            {
+            if (piece.kind == PieceType::I) {
                 isI = true;
                 kickdata = &Iwallkick180data[piece.spin];
             }
@@ -523,13 +487,9 @@ private:
         //rotate the matrix back if nothing worked
         if (direction == Right) {
             piece.rotateCCW();
-        }
-        else if (direction == Left)
-        {
+        } else if (direction == Left) {
             piece.rotateCW();
-        }
-        else if (direction == oneEighty)
-        {
+        } else if (direction == oneEighty) {
             piece.rotateCCW();
             piece.rotateCCW();
         }
@@ -538,15 +498,17 @@ private:
 
     Board board;
     SurfaceSpriteSheet pieces;
-    SpriteSheet ghostPieces;
+    SurfaceSpriteSheet ghostPieces;
     Sprite background;
     Sprite matrix;
     SurfaceTexture surface_matrix;
+    std::array<SurfaceTexture, 5> surface_queue;
+    SurfaceTexture surface_hold;
     std::vector<Piece> queue{};
     Piece hold{ PieceType::empty };
     Piece currentPiece{ PieceType::empty };
     TTF_Font* font{};
-    Uint64 timeWhenInit{};
+    uint64_t timeWhenInit{};
     int32_t piecesPlaced{};
     int32_t softdropCountdown = softdropCountdownMAX;
     int32_t pieceSpawnDelay = pieceSpawnDelayMAX;
@@ -575,8 +537,7 @@ private:
 
 };
 
-Game::Game()
-{
+Game::Game() {
 
 }
 
@@ -594,8 +555,7 @@ void Game::gameLogic(const Shakkar::inputs& input) {
     if (k_left.pressed) {
         leftPressedMostRecent = true;
         rightPressedMostRecent = false;
-    }
-    else if (k_right.pressed) {
+    } else if (k_right.pressed) {
         rightPressedMostRecent = true;
         leftPressedMostRecent = false;
     }
@@ -611,8 +571,7 @@ void Game::gameLogic(const Shakkar::inputs& input) {
         int linesCleared = board.clearLines();
         bool perfectCleared = true;
         for (auto& row : board.board) {
-            for (auto& mino : row)
-            {
+            for (auto& mino : row) {
                 if (mino == empty)
                     continue;
                 else {
@@ -624,30 +583,26 @@ void Game::gameLogic(const Shakkar::inputs& input) {
         if (linesCleared == 0)
             currentCombo = 0;
         auto tmp1 = std::clamp(int(linesCleared), 0, DAMAGETABLESIZE - 1);
-        auto tmp2 = std::clamp(int(currentCombo), 0, COMBOTABLESIZE  - 1);
+        auto tmp2 = std::clamp(int(currentCombo), 0, COMBOTABLESIZE - 1);
         if (perfectCleared) {
             numDamageSent += perfectClearDamage + comboTable[tmp2];
-        }
-        else if (Tspinned) {
+        } else if (Tspinned) {
             numDamageSent += (linesCleared * 2) + comboTable[tmp2];
-        }
-        else
+        } else
             numDamageSent += damageTable[tmp1] + comboTable[tmp2];
 
         if (linesCleared > 0) {
             currentCombo++;
             this->numLinesCleared += linesCleared;
         }
-		
-        if ((linesCleared == 4) || Tspinned)
-        {
+
+        if ((linesCleared == 4) || Tspinned) {
             if (b2b) {
                 numDamageSent += backToBackBonus;
             }
             b2b = true;
             Tspinned = false;
-        }
-        else if (linesCleared > 0)
+        } else if (linesCleared > 0)
             b2b = false;
         checkForLineClear = false;
     }
@@ -655,38 +610,30 @@ void Game::gameLogic(const Shakkar::inputs& input) {
     if ((currentPiece.kind != PieceType::empty) && !isDie) // we have a piece!
     {
 
-        if (leftState)
-        {
+        if (leftState) {
             tryMovePiece(MoveDirection::Left, !(k_left.held || k_left.released));
-        }
-        else if (rightState)
-        {
+        } else if (rightState) {
             tryMovePiece(MoveDirection::Right, !(k_right.held || k_right.released));
         }
 
         {
-            if (softdropCountdown <= 0)
-            {
+            if (softdropCountdown <= 0) {
                 //softdrop pls
                 if (!board.trySoftDrop(currentPiece)) {
                     //failed, we are on the ground
-                    if (lockDelayIncrementer >= lockDelayMAX)
-                    {
+                    if (lockDelayIncrementer >= lockDelayMAX) {
                         board.setPiece(currentPiece);
                         currentPiece.kind = PieceType::empty;
                         checkForLineClear = true;
                         lockDelayIncrementer = 0;
                         alreadyHeld = false;
                         placedPiece = true;
-                    }
-                    else
+                    } else
                         lockDelayIncrementer++;
 
-                }
-                else
+                } else
                     softdropCountdown = softdropCountdownMAX;
-            }
-            else {
+            } else {
 
                 if (k_softDrop.pressed || k_softDrop.held)
                     softdropCountdown -= 40;
@@ -710,15 +657,13 @@ void Game::gameLogic(const Shakkar::inputs& input) {
                 board.sonicDrop(currentPiece);
 
             // hold logic
-            if (k_hold.pressed)
-            {
+            if (k_hold.pressed) {
                 if (!alreadyHeld) {
                     std::swap(currentPiece, hold);
                     currentPiece.setX(4);
                     currentPiece.setY(VISUALBOARDHEIGHT - 1);
 
-                    switch (currentPiece.spin)
-                    {
+                    switch (currentPiece.spin) {
                     case North:
                         break;
                     case East:
@@ -735,8 +680,7 @@ void Game::gameLogic(const Shakkar::inputs& input) {
                     }
                     currentPiece.spin = North;
 
-                    switch (hold.spin)
-                    {
+                    switch (hold.spin) {
                     case North:
                         break;
                     case East:
@@ -770,8 +714,7 @@ void Game::gameLogic(const Shakkar::inputs& input) {
             }
 
             //harddrop logic
-            if (k_hardDrop.pressed)
-            {
+            if (k_hardDrop.pressed) {
                 board.sonicDrop(currentPiece);
                 board.setPiece(currentPiece);
                 currentPiece.kind = PieceType::empty;
@@ -783,8 +726,7 @@ void Game::gameLogic(const Shakkar::inputs& input) {
 
 
         }
-    }
-    else if ((pieceSpawnDelay <= 0) && !isDie) { //guarenteed no piece
+    } else if ((pieceSpawnDelay <= 0) && !isDie) { //guarenteed no piece
 
         pieceSpawnDelay = pieceSpawnDelayMAX;
         softdropCountdown = softdropCountdownMAX;
@@ -805,8 +747,7 @@ void Game::gameLogic(const Shakkar::inputs& input) {
         rightState = false;
         checkForLineClear = false;
 
-    }
-    else
+    } else
         pieceSpawnDelay--;
 }
 
@@ -815,11 +756,11 @@ void Game::render(Window& window) {
     window.clear();
     auto [w, h] = window.get_window_size();
 
-	background.destRect = window.calculate_outer_rect({ 0, 0, w, h }, (float)background.srcRect.w / background.srcRect.h);
+    background.destRect = window.calculate_outer_rect({ 0, 0, w, h }, (float)background.srcRect.w / background.srcRect.h);
     background.render(window);
 
     //game_surface.createSurface(window, matrix.srcRect.w, matrix.srcRect.h);
-	//game_surface.blitSurface(window, matrix.texture, 0, 0);
+    //game_surface.blitSurface(window, matrix.texture, 0, 0);
 
     matrix.destRect = window.calculate_inner_rect({ 0, 0, w, h }, (float)matrix.srcRect.w / matrix.srcRect.h);
     matrix.destRect = window.horizontal_align({ 0, 0, w, h }, matrix.destRect);
@@ -831,7 +772,7 @@ void Game::render(Window& window) {
                 return true;
             }
         return false;
-    };
+        };
 
     auto doesVisualHaveMinoHere = [](Piece& piece, int x, int y) {
         for (auto& coord : piece.piecedef)
@@ -839,7 +780,7 @@ void Game::render(Window& window) {
                 return true;
             }
         return false;
-    };
+        };
     auto get_render_index = [](ColorType block) {
         switch (block) {
         case S:
@@ -855,220 +796,123 @@ void Game::render(Window& window) {
         case O:
             return 4;
         case I:
-			return 6;
+            return 6;
         case empty:
-			return 1;
+            return 1;
         case garbage:
-			return 0;
+            return 0;
         case line_clear:
-			return 9;
+            return 9;
         default:
             break;
         }
         return 0;
-    };
+        };
 
-    for(int y = 0; y < 20; y++) {
-        for(int x = 0; x < board.board.size(); x++) {
+    for (int y = 0; y < 20; y++) {
+        for (int x = 0; x < board.board.size(); x++) {
             auto& column = board.board[x];
             auto& mino = column[y];
 
             pieces.updateSection(get_render_index(mino), 0);
-            SDL_Rect dest = { 16 * x, 16 * ( VISUALBOARDHEIGHT - 1 - y), 16, 16 };
-			surface_matrix.blitSpriteSurface(window, pieces, dest);
-		}
+            SDL_Rect dest = { 16 * x, 16 * (VISUALBOARDHEIGHT - 1 - y), 16, 16 };
+            surface_matrix.blitSpriteSurface(window, pieces, dest);
+        }
     }
 
-	// render the current piece
-
+    // render the current piece
     for (auto& mino_cord : this->currentPiece.piecedef) {
-		pieces.updateSection(get_render_index(PieceTypeToColorType(this->currentPiece.kind)), 0);
-		int x = mino_cord.x + this->currentPiece.x;
-		int y = mino_cord.y + this->currentPiece.y;
+        pieces.updateSection(get_render_index(PieceTypeToColorType(this->currentPiece.kind)), 0);
+        int x = mino_cord.x + this->currentPiece.x;
+        int y = mino_cord.y + this->currentPiece.y;
         if (y > VISUALBOARDHEIGHT - 1)
             continue;
 
         SDL_Rect dest = { 16 * x, 16 * (VISUALBOARDHEIGHT - 1 - y), 16, 16 };
-		surface_matrix.blitSpriteSurface(window, pieces, dest);
+        surface_matrix.blitSpriteSurface(window, pieces, dest);
     }
 
-	// render the surface matrix
-    surface_matrix.destRect = window.calculate_logical_rect(matrix.destRect, { 50, 34, 170 - 50,274 - 34}, matrix.srcRect.w, matrix.srcRect.h);
-	surface_matrix.createTexture(window);
-	surface_matrix.render(window);
 
-    // render the ghost piece
+    // calculate the ghost piece
     Piece ghost(currentPiece.kind, currentPiece.x, currentPiece.y, currentPiece.spin);
     if (ghost.kind != PieceType::empty)
         board.sonicDrop(ghost);
 
-    /*
-    // render the board
-    // the minus ones because otherwise https://cdn.discordapp.com/attachments/802969309260677120/909250930506080326/unknown.png
-    for (int height = VISUALBOARDHEIGHT - 1; height >= 0; height--) {
-        for (int width = 0; width < BOARDWIDTH; width++) {
-            auto helper = [&](SpriteSheet& minos) {
-                minos.destRect.x = board_rect.w + (width * (24 * 2));
-                minos.destRect.w = 16 * 3;
-                minos.destRect.y = board_rect.h + ((VISUALBOARDHEIGHT - height - 1) * (24 * 2));
-                minos.destRect.h = 16 * 3;
-                };
-            auto drawPiece = [&](ColorType block, SpriteSheet& minos) {
-                switch (block) {
-                case empty:
-                    minos.srcRect.x = 16;
-                    helper(minos);
-                    break;
-                case Z:
-                    minos.srcRect.x = 32;
-                    helper(minos);
-                    break;
-                case L:
-                    minos.srcRect.x = 48;
-                    helper(minos);
-                    break;
-                case O:
-                    minos.srcRect.x = 64;
-                    helper(minos);
-                    break;
-                case S:
-                    minos.srcRect.x = 80;
-                    helper(minos);
-                    break;
-                case I:
-                    minos.srcRect.x = 96;
-                    helper(minos);
-                    break;
-                case J:
-                    minos.srcRect.x = 112;
-                    helper(minos);
-                    break;
-                case T:
-                    minos.srcRect.x = 128;
-                    helper(minos);
-                    break;
-                case line_clear:
-                    minos.srcRect.x = 144;
-                    helper(minos);
-                    break;
-                default:
-                    break;
-                }
-                };
-            if (doesPieceHaveMinoHere(currentPiece, width, height)) {
-                drawPiece(PieceTypeToColorType(currentPiece.kind), pieces);
-                pieces.render(window);
+    // render the ghost piece on the matrix
+    for (auto& mino_cord : ghost.piecedef) {
+        ghostPieces.updateSection(get_render_index(PieceTypeToColorType(ghost.kind)), 0);
+        int x = mino_cord.x + ghost.x;
+        int y = mino_cord.y + ghost.y;
+        if (y > VISUALBOARDHEIGHT - 1)
+            continue;
 
-            } else if (doesPieceHaveMinoHere(ghost, width, height)) {
-                drawPiece(PieceTypeToColorType(ghost.kind), ghostPieces);
-                ghostPieces.render(window);
-            } else {
-                drawPiece(board.board[width][height], pieces);
-                pieces.render(window);
+        SDL_Rect dest = { 16 * x, 16 * (VISUALBOARDHEIGHT - 1 - y), 16, 16 };
 
+        surface_matrix.blitSpriteSurface(window, ghostPieces, dest);
+    }
+
+    // render the queue pieces
+    for (size_t i = 0; i < 5; i++) {
+        auto& piece = queue[i];
+        auto& queue_view = this->surface_queue[i];
+
+        // make the queue empty before rendering the queue
+        pieces.updateSection(get_render_index(ColorType::empty), 0);
+        for (int x = 0; x < 5; x++)
+            for (int y = 0; y < 5; y++) {
+                SDL_Rect dest = { 16 * (x), 16 * (4 - y), 16, 16 };
+                queue_view.blitSpriteSurface(window, pieces, dest);
             }
+        for (auto& mino_cord : piece.piecedef) {
+            pieces.updateSection(get_render_index(PieceTypeToColorType(piece.kind)), 0);
+            int x = mino_cord.x + 2;
+            int y = mino_cord.y + 2;
+            SDL_Rect dest = { 16 * x, 16 * (5 - y - 1), 16, 16 };
+            queue_view.blitSpriteSurface(window, pieces, dest);
         }
     }
 
-    int  queue_x_position = board_rect.w + board_rect.x;
-    int  queue_y_position = board_rect.h;
-    int queue_mino_width = board_rect.w / 5.0f;
+    // render the hold onto the surface
+	for (int x = 0; x < 5; x++) {
+		for (int y = 0; y < 5; y++) {
+			// make the hold empty before rendering the hold
+			pieces.updateSection(get_render_index(ColorType::empty), 0);
+			SDL_Rect dest = { 16 * (x), 16 * (4 - y), 16, 16 };
+			surface_hold.blitSpriteSurface(window, pieces, dest);
+		}
+	}
 
-    //render queue 5 pieces to be seen, each with its own matrix of a 5x5 view
-    for (size_t q = 0; q < 5; q++) {
-        for (int y = 0, realy = 4; y < 5; y++, realy--)
-            //for (int y = 0; y < PIECEHEIGHT; y++)
-        {
-            for (int x = 0; x < 5; x++)
-                //for (int x = PIECEWIDTH -1; x >= 0; x--)
-            {
-                auto helper = [&](SpriteSheet& minos) {
-                    minos.destRect.x = queue_x_position + (x * (16 * 2));
-                    minos.destRect.w = 16 * 2;
-                    minos.destRect.y = queue_y_position + (y * (16 * 2));
-                    minos.destRect.h = 16 * 2;
-                    };
-                
-                if (doesVisualHaveMinoHere(queue[q], x, realy)) {
-                    drawPiece(PieceTypeToColorType(queue[q].kind), pieces);
-                } else
-                    drawPiece(empty, pieces);
-                pieces.render(window);
-            }
-        }
-        queue_y_position += (2 * 4);
-        queue_y_position += (5 * 16 * 2);
-    }
-
-
-    const int  hold_width_offset = board_rect.w - (42 * 4);
-    const int  hold_height_offset = board_rect.h;
-
-    //render the holds
-    for (int h = 0; h < 1; h++) {
-        for (int y = 0, realY = 4; y < 5; y++, realY--)
-            //for (int y = 0; y < PIECEHEIGHT; y++)
-        {
-            for (int x = 0; x < 5; x++)
-                //for (int x = PIECEWIDTH -1; x >= 0; x--)
-            {
-                auto helper = [&](SpriteSheet& minos) {
-                    minos.destRect.x = hold_width_offset + (x * (16 * 2));
-                    minos.destRect.w = 16 * 2;
-                    minos.destRect.y = hold_height_offset + ((y) * (16 * 2));
-                    minos.destRect.h = 16 * 2;
-                    };
-                auto drawPiece = [&](const ColorType block, SpriteSheet& minos) {
-                    switch (block) {
-                    case empty:
-                        minos.srcRect.x = 16;
-                        helper(minos);
-                        break;
-                    case Z:
-                        minos.srcRect.x = 32;
-                        helper(minos);
-                        break;
-                    case L:
-                        minos.srcRect.x = 48;
-                        helper(minos);
-                        break;
-                    case O:
-                        minos.srcRect.x = 64;
-                        helper(minos);
-                        break;
-                    case S:
-                        minos.srcRect.x = 80;
-                        helper(minos);
-                        break;
-                    case I:
-                        minos.srcRect.x = 96;
-                        helper(minos);
-                        break;
-                    case J:
-                        minos.srcRect.x = 112;
-                        helper(minos);
-                        break;
-                    case T:
-                        minos.srcRect.x = 128;
-                        helper(minos);
-                        break;
-                    case line_clear:
-                        minos.srcRect.x = 144;
-                        helper(minos);
-                        break;
-                    default:
-                        break;
-                    }
-                    };
-                if (doesVisualHaveMinoHere(hold, x, realY)) {
-                    drawPiece(PieceTypeToColorType(hold.kind), pieces);
-                } else
-                    drawPiece(empty, pieces);
-                pieces.render(window);
-            }
+    if (hold.kind != PieceType::empty) {
+        for (auto& mino : hold.piecedef) {
+			// render the hold piece
+			pieces.updateSection(get_render_index(PieceTypeToColorType(hold.kind)), 0);
+			int x = mino.x + 2; // offset by 2 to center it in the 5x5 grid
+			int y = mino.y + 2; // offset by 2 to center it in the 5x5 grid
+			SDL_Rect dest = { 16 * x, 16 * (4 - y), 16, 16 };
+			surface_hold.blitSpriteSurface(window, pieces, dest);
         }
     }
-    */
+
+
+    // render the surface matrix
+    surface_matrix.destRect = window.calculate_logical_rect(matrix.destRect, { 50, 34, 170 - 50,274 - 34 }, matrix.srcRect.w, matrix.srcRect.h);
+    surface_matrix.createTexture(window);
+    surface_matrix.render(window);
+
+    // render the queue to the screen
+    for (int i = 0; i < 5; i++) {
+        // the first should be at 172,34, and be 40x40 
+        auto& queue_view = this->surface_queue[i];
+        queue_view.destRect = window.calculate_logical_rect(matrix.destRect, { 172, 34 + (i * 40) + (i * 2), 40, 40 }, matrix.srcRect.w, matrix.srcRect.h);
+        queue_view.createTexture(window);
+        queue_view.render(window);
+    }
+
+    // render the hold onto the location 8,34,40,40
+	surface_hold.destRect = window.calculate_logical_rect(matrix.destRect, { 8,34, 40, 40 }, matrix.srcRect.w, matrix.srcRect.h);
+	surface_hold.createTexture(window);
+	surface_hold.render(window);
+
 
     SDL_Color color{};
     color.r = 0xff; color.g = 0xff; color.b = 0xff;
@@ -1087,7 +931,7 @@ void Game::render(Window& window) {
     SDL_Texture* text = window.create_texture_from_surface(TextSurface);
 
     SDL_Rect test = { 0, surface_matrix.destRect.y + int(surface_matrix.destRect.h / 1.9), 0, 0 };
-	int text_x = surface_matrix.destRect.x;
+    int text_x = surface_matrix.destRect.x;
 
     test.w = TextSurface->w;
     test.h = TextSurface->h;
@@ -1142,7 +986,6 @@ void Game::render(Window& window) {
     SDL_DestroyTexture(text);
 }
 
-Game::~Game()
-{
+Game::~Game() {
 
 }
