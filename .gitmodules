@@ -1,6 +1,0 @@
-[submodule "Simple-INI-Parser"]
-	path = Simple-INI-Parser
-	url = https://github.com/shakkar23/Simple-INI-Parser
-[submodule "inipp"]
-	path = inipp
-	url = https://github.com/mcmtroffaes/inipp/
